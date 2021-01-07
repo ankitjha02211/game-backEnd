@@ -3,7 +3,8 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const mongodb = require("./config/db/connect_mongoDB")();
+// const mongodb = require("./config/db/connect_mongoDB")();
+const inmem = require("./config/db/connect_memory_mongo").connect();
 const indexRouter = require("./routes/index");
 const notFoundRouter = require("./routes/notFound_Routes/notFound");
 

@@ -5,10 +5,10 @@ var Schema = mongoose.Schema;
 
 var userSchema = new Schema(
   {
-    fullname: String,
-    username: {
+    name: {
       type: String,
       required: true,
+      unique: true,
     },
   },
   { collection: "userMaster" }
