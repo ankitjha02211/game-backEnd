@@ -1,17 +1,18 @@
 var express = require("express");
 var router = express.Router();
 let user = require("../../controllers/Dashboard/user.controller");
+let authMiddleware = require("../../middleware/auth.middleware");
 
-router.get("/me", function (req, res, next) {
-  console.log("/me");
+router.get("/me", authMiddleware, function (req, res, next) {
+  user.profile(req, res, next);
 });
 
-router.post("/game/play", function (req, res, next) {
-  console.log("/play");
+router.post("/game/play", authMiddleware, function (req, res, next) {
+  user.gamePlay(req, res, next);
 });
 
-router.post("/game/claim_bonus", function (req, res, next) {
-  console.log("/claim");
+router.post("/game/claim_bonus", authMiddleware, function (req, res, next) {
+  user.claimBonus(req, res, next);
 });
 
 module.exports = router;

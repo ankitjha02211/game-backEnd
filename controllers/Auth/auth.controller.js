@@ -8,7 +8,6 @@ const jwt = require("../../lib/jwt_generator");
 // authorise user) Description: using this method user can be registered in the system provided
 // name (name should be unique) and get authorisation token. This token will be used to
 // access API endpoints which require authorisation
-
 module.exports.register = async (req, res, next) => {
   try {
     let name = String(req.body.name);
@@ -18,6 +17,7 @@ module.exports.register = async (req, res, next) => {
       if (valid2.length == 0) {
         let user = new userModel({
           name,
+          points: 0,
         });
         user.save((err, result) => {
           if (err) {

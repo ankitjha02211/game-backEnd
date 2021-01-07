@@ -10,6 +10,7 @@ var userSchema = new Schema(
       required: true,
       unique: true,
     },
+    points: { type: Number },
   },
   { collection: "userMaster" }
 );
