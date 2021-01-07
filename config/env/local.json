@@ -1,0 +1,5 @@
+{
+  "name": "localhost",
+  "db": "mongodb://localhost/game",
+  "jwtSec": "secret"
+}
