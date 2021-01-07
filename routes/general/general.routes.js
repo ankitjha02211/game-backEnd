@@ -3,7 +3,7 @@ var router = express.Router();
 let general = require("../../controllers/General/general.controller");
 
 router.get("/now", function (req, res, next) {
-  console.log("/now");
+  general.getTimeStamp(req, res, next);
 });
 
 router.get("/leaderboard", function (req, res, next) {
