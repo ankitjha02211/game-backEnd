@@ -1,11 +1,12 @@
 var jwt = require("jsonwebtoken");
-let env = require("../config/env/index");
+//let env = require("../config/env/index");
+let checkToken = require("../lib/jwt_generator").checkToken;
 
 module.exports = (req, res, next) => {
   const token = req.header("token");
   if (!token) return res.status(401).send("Access denied");
   try {
-    var decoded = jwt.verify(token, env.jwtSec);
+    var decoded = checkToken(token);
     req.user = decoded;
     next();
   } catch (err) {
