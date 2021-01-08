@@ -44,7 +44,7 @@ module.exports.gamePlay = async (req, res, next) => {
       let result = { points_added: points, points_total: total_points };
       response.success(res, 200, result);
     } else {
-      throw new Error("Error while retrieving data");
+      throw new Error("Something went wrong");
     }
   } catch (error) {
     response.failed(res, 404, error);
@@ -57,16 +57,16 @@ module.exports.gamePlay = async (req, res, next) => {
 // of registration or date of the last bonus claim user has ability to get 10 extra points.
 // Maximum amount of points which user can get for 1 claim request is limited by 100.
 
-// module.exports.claimBonus = async (req, res, next) => {
-//   try {
-//     let name = req.user.data.name;
-//     let data = await userModel.find({ name: name }, { name: 1, points: 1 });
-//     if (data.length == 1) {
-//       response.success(res, 200, data);
-//     } else {
-//       throw new Error("Error while retrieving data");
-//     }
-//   } catch (error) {
-//     response.failed(res, 404, error);
-//   }
-// };
+module.exports.claimBonus = async (req, res, next) => {
+  try {
+    let name = req.user.data.name;
+    let data = await userModel.find({ name: name }, { name: 1, points: 1 });
+    if (data.length == 1) {
+      response.success(res, 200, data);
+    } else {
+      throw new Error("Error while retrieving data");
+    }
+  } catch (error) {
+    response.failed(res, 404, error);
+  }
+};
