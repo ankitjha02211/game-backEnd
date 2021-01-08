@@ -2,12 +2,12 @@ var express = require("express");
 var router = express.Router();
 let user = require("../../controllers/Dashboard/user.controller");
 let authMiddleware = require("../../middleware/auth.middleware");
-
+let limiter = require("../../middleware/rateLimiter");
 router.get("/me", authMiddleware, function (req, res, next) {
   user.profile(req, res, next);
 });
 
-router.post("/game/play", authMiddleware, function (req, res, next) {
+router.post("/game/play", authMiddleware, limiter, function (req, res, next) {
   user.gamePlay(req, res, next);
 });
 
