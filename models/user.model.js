@@ -11,6 +11,7 @@ var userSchema = new Schema(
       unique: true,
     },
     points: { type: Number },
+    updated_at: { type: Date, default: Date.now },
   },
   { collection: "userMaster" }
 );

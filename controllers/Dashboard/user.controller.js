@@ -60,13 +60,42 @@ module.exports.gamePlay = async (req, res, next) => {
 module.exports.claimBonus = async (req, res, next) => {
   try {
     let name = req.user.data.name;
-    let data = await userModel.find({ name: name }, { name: 1, points: 1 });
+    let data = await userModel.find({ name: name });
     if (data.length == 1) {
-      response.success(res, 200, data);
+      let points = Math.floor(differenceCalculator(data[0].updated_at));
+      let total_points = data[0].points + points;
+      if (points > 0) {
+        let newDate = new Date();
+        await userModel.updateOne(
+          { name: name },
+          { $set: { points: total_points, updated_at: newDate } }
+        );
+        let result = { points_added: points, points_total: total_points, data };
+        response.success(res, 200, result);
+      } else {
+        throw new Error("Please claim after 1 min");
+      }
     } else {
-      throw new Error("Error while retrieving data");
+      throw new Error("Something went wrong");
     }
   } catch (error) {
     response.failed(res, 404, error);
+  }
+};
+
+let differenceCalculator = (last) => {
+  let lastDate = new Date(last).getTime();
+  let currentDate = new Date().getTime();
+  let diff = Math.floor((currentDate - lastDate) / (60 * 1000));
+  console.log(Math.floor(diff));
+  if (diff > 0 && diff < 10) {
+    console.log("if", diff);
+    return diff * 10;
+  } else if (diff >= 10) {
+    console.log("else if", diff);
+    return 100;
+  } else {
+    console.log("else", diff);
+    return 0;
   }
 };
