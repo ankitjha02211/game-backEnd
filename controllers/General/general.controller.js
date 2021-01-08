@@ -1,5 +1,7 @@
 "use strict";
 const response = require("../../lib/response");
+const checkToken = require("../../lib/jwt_generator").checkToken;
+const userModel = require("../../models/user.model");
 
 // URL: /now Request method: GET Authorisation: not required Response: – timestamp:
 // number (current server time) Description: using this method user is able to get current
@@ -28,10 +30,29 @@ module.exports.getTimeStamp = (req, res, next) => {
 //   ability to get 10 best players (with most amount of points). OPTIONALLY: If bearer token
 //   provided server also should return current user's place in the ranking
 
-module.exports.leaderboard = (req, res, next) => {
+module.exports.leaderboard = async (req, res, next) => {
   try {
-    console.log("Hit");
-    response.success(res, 200, data);
+    const token = req.header("token");
+    if (token) {
+      let userData = checkToken(token);
+      let name = userData.data.name;
+      let data = await userModel
+        .find({ name: name }, { name: 1, points: 1 })
+        .lean();
+      let userPoints = data[0].points;
+      await userModel.count(
+        { points: { $gt: userPoints } },
+        function (err, count) {
+          if (err) {
+            response.failed(res, 404, error);
+          }
+          response.success(res, 200, count + 1);
+        }
+      );
+    } else {
+      let data = await userModel.find().sort({ points: -1 }).limit(10);
+      response.success(res, 200, data);
+    }
   } catch (error) {
     response.failed(res, 404, error);
   }
