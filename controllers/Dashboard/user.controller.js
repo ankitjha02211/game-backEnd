@@ -87,15 +87,11 @@ let differenceCalculator = (last) => {
   let lastDate = new Date(last).getTime();
   let currentDate = new Date().getTime();
   let diff = Math.floor((currentDate - lastDate) / (60 * 1000));
-  console.log(Math.floor(diff));
   if (diff > 0 && diff < 10) {
-    console.log("if", diff);
     return diff * 10;
   } else if (diff >= 10) {
-    console.log("else if", diff);
     return 100;
   } else {
-    console.log("else", diff);
     return 0;
   }
 };
