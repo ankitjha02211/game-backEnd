@@ -7,7 +7,7 @@ router.get("/now", function (req, res, next) {
 });
 
 router.get("/leaderboard", function (req, res, next) {
-  console.log("/leaderboard");
+  general.leaderboard(req, res, next);
 });
 
 module.exports = router;

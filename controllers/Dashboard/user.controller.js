@@ -9,7 +9,9 @@ const userModel = require("../../models/user.model");
 module.exports.profile = async (req, res, next) => {
   try {
     let name = req.user.data.name;
-    let data = await userModel.find({ name: name }, { name: 1, points: 1 });
+    let data = await userModel
+      .find({ name: name }, { name: 1, points: 1 })
+      .lean();
     if (data.length == 1) {
       response.success(res, 200, data);
     } else {
@@ -28,19 +30,26 @@ module.exports.profile = async (req, res, next) => {
 // times. For example: First request at 11:05 – OK Second request at 11:06 – OK Third request
 // at 11:20 – OK Forth request at 11:40 – OK Fifth request at 11:4
 
-// module.exports.gamePlay = async (req, res, next) => {
-//   try {
-//     let name = req.user.data.name;
-//     let data = await userModel.find({ name: name }, { name: 1, points: 1 });
-//     if (data.length == 1) {
-//       response.success(res, 200, data);
-//     } else {
-//       throw new Error("Error while retrieving data");
-//     }
-//   } catch (error) {
-//     response.failed(res, 404, error);
-//   }
-// };
+module.exports.gamePlay = async (req, res, next) => {
+  try {
+    let points = Math.floor(Math.random() * 101);
+    let name = req.user.data.name;
+    let data = await userModel.find({ name: name }, { name: 1, points: 1 });
+    if (data.length == 1) {
+      let total_points = data[0].points + points;
+      await userModel.updateOne(
+        { name: name },
+        { $set: { points: total_points } }
+      );
+      let result = { points_added: points, points_total: total_points };
+      response.success(res, 200, result);
+    } else {
+      throw new Error("Error while retrieving data");
+    }
+  } catch (error) {
+    response.failed(res, 404, error);
+  }
+};
 
 // URL /game/claim_bonus Request method: POST Authorisation: Bearer token Response: –
 // points_added: number (amount of points added to the user's balance) – points_total:
