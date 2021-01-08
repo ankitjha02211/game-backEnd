@@ -36,10 +36,11 @@ module.exports.gamePlay = async (req, res, next) => {
     let name = req.user.data.name;
     let data = await userModel.find({ name: name }, { name: 1, points: 1 });
     if (data.length == 1) {
+      let newDate = new Date();
       let total_points = data[0].points + points;
       await userModel.updateOne(
         { name: name },
-        { $set: { points: total_points } }
+        { $set: { points: total_points, updated_at: newDate } }
       );
       let result = { points_added: points, points_total: total_points };
       response.success(res, 200, result);
