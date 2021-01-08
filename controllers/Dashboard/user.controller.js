@@ -70,7 +70,7 @@ module.exports.claimBonus = async (req, res, next) => {
           { name: name },
           { $set: { points: total_points, updated_at: newDate } }
         );
-        let result = { points_added: points, points_total: total_points, data };
+        let result = { points_added: points, points_total: total_points };
         response.success(res, 200, result);
       } else {
         throw new Error("Please claim after 1 min");
