@@ -45,8 +45,10 @@ module.exports.leaderboard = async (req, res, next) => {
         function (err, count) {
           if (err) {
             response.failed(res, 404, error);
+          } else {
+            let current = { current_user_place: count + 1 };
+            response.success(res, 200, current);
           }
-          response.success(res, 200, count + 1);
         }
       );
     } else {
